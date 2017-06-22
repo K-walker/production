@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    
+    <com.king.snaker.widget.SnackView
+        android:id="@+id/snake"
+        android:layout_width="800dp"
+        android:layout_height="match_parent"
+        android:background="#343339"/>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+          
+        <TextView 
+            android:id="@+id/score"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:textColor="#C31F0D"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:text="当前得分:0"/>
+        
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+        
+         <Button 
+            android:id="@+id/left"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_below="@+id/up"
+	        android:onClick="onKeyDwon"
+	        android:text="←"/>
+	    <Button 
+	        android:id="@+id/down"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_toRightOf="@id/left"
+	        android:layout_alignTop="@id/left"
+	        android:onClick="onKeyDwon"
+	        android:text="↓"/>
+	    <Button
+            android:id="@+id/up" 
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_alignLeft="@id/down"
+	        android:onClick="onKeyDwon"
+	        android:text="↑"/>
+	    <Button 
+	        android:id="@+id/right"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_toRightOf="@id/down"
+	        android:layout_alignTop="@id/left"
+	        android:onClick="onKeyDwon"
+	        android:text="→"/>
+	    
+	    <Button 
+	        android:id="@+id/start"
+	        android:layout_width="65dp"
+	        android:layout_height="45dp"
+	        android:onClick="onKeyDwon"
+	        android:layout_marginLeft="10dp"
+	        android:layout_above="@+id/restart"
+	        android:text="start"/>
+	    <Button 
+	        android:id="@+id/pause"
+	        android:layout_width="65dp"
+	        android:layout_height="45dp"
+	        android:layout_toRightOf="@id/start"
+	        android:layout_alignTop="@id/start"
+	        android:onClick="onKeyDwon"
+	        android:text="pause"/>
+	    <Button 
+	        android:id="@+id/restart"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_alignParentBottom="true"
+	        android:onClick="onKeyDwon"
+	        android:text="restart"/>
+	  
+    </RelativeLayout>
+    </LinearLayout>
+   
+</LinearLayout>

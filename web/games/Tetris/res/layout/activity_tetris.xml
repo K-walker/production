@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <com.king.tetris.widget.TetrisView
+        android:id="@+id/tetrisView"
+        android:layout_width="350dp"
+        android:layout_height="450dp" 
+        android:background="#99A1A6"/>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+ 
+    <Button 
+        android:id="@+id/start"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:onClick="onKeyDown"
+        android:text="start"/>
+    <Button 
+        android:id="@+id/stop"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:onClick="onKeyDown"
+        android:text="stop"/>
+        <Button
+        android:id="@+id/left"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:onClick="onKeyDown"
+        android:text="left"/>
+    <Button
+        android:id="@+id/right"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:onClick="onKeyDown"
+        android:text="right"/>
+       <Button 
+        android:id="@+id/change"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:onClick="onKeyDown"
+        android:text="change"/>
+</LinearLayout>
+</LinearLayout>

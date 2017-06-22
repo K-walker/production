@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>黑白键</title>
+    <style>
+        .screen {
+            width:324px;
+            height:450px;
+            border-left: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 0 auto;
+            overflow-y: hidden;
+        }
+        #grid {
+            display: inline-block;
+        }
+        .screen span {
+            width: 80px;
+            height: 80px;
+            display: inline-block;
+            margin: 0;
+            float: left;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            line-height: 80px;
+            color: red;
+        }
+
+        .score-wrapper {
+            width: 324px;
+            margin: 0 auto;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        .score-wrapper span {
+            display: inline-block;
+            line-height:  30px;
+            text-align: center;
+        }
+        .score-wrapper a {
+            float: right;
+            display: inline-block;
+            line-height: 28px;
+            width: 80px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .score-wrapper a:hover {
+            background-color: #03a9f4;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="score-wrapper">
+    <span>当前得分:</span>
+    <span id="score">0</span>
+    <a onclick="startGame()">开始</a>
+</div>
+<div class="screen" id="container">
+    <div id="grid"></div>
+</div>
+<script src="../js/jquery-3.0.0.js"></script>
+<script>
+
+    var speed = 1;        // 琴键向下移动的速度
+    var rowNum = 0 ;      // 屏幕最多可显示的行数
+    var panioKey = null ; // 所有琴键的集合（黑+白）
+    var clickKeys = [];   // 保存被点击的key
+    var blackKey = [];
+    var total = 0 ;
+    var timeId = null ;
+
+    /**
+     * 初始化游戏界面
+     */
+    function init () {
+        clear();
+        rowNum = Math.ceil($("#container").height() / 80) ;
+        for(var i = 0 ; i < rowNum * 4 * 2 ; i++) {
+            var $span = $("<span index="+i+"></span>");
+            $span.data(i.toString() , new PanioKey(i));
+            $("#grid").append($span);
+        }
+        $("#container").scrollTop( $("#grid").height() - $("#container").height() - 1);
+        panioKey = $("#container #grid span");
+    }
+
+
+    /**
+     * 琴键被点击的回调
+     */
+    function addClickEvent () {
+        $("#container #grid span").click(function () {
+            // 当前游戏正在进行中才可以点击
+            if(!timeId) {
+                return false;
+            }
+            var index = $(this).attr("index") ;
+            var p = $(this).data(index.toString()) ;
+            if(!p.isBlackKey) {
+                gameOver();
+                return false;
+            }
+            var score = parseInt($("#score").text());
+            $("#score").text(score + 1) ;
+            setPanioState(index , p.isBlackKey , true);
+            clickKeys.push(index.toString());
+        })
+    }
+
+    /**
+     * 琴键向下滚动
+     */
+    function scroll () {
+        if($("#container").scrollTop() <= rowNum * 80 - $("#container").height() + rowNum ) {
+            $("#container").scrollTop( $("#grid").height() - $("#container").height() - 1);
+            total = 0 ;
+            onReset();
+        } else {
+            $("#container").scrollTop($("#container").scrollTop() - 1);
+            if( $("#container").scrollTop() % 80 == 0) {
+                onEnter($("#container").scrollTop() / 80 - 1);
+            }
+            total ++ ;
+            if(total % 80 == 0) {
+                onLeave(rowNum * 2 - total / 80);
+            }
+        }
+    }
+
+    /**
+     * 琴键第一次进入屏幕时回调
+     * 在当前这一行，随机产生一个黑色琴键
+     */
+    function onEnter (rowIndex) {
+        var random = parseInt(Math.random()*4);
+        var index = (rowIndex * 4) + random ;
+        $(panioKey[index]).css("backgroundColor","#000");
+        setPanioState(index , true , false);
+        blackKey.push(index);
+    }
+    /**
+     * 琴键移出屏幕时回调
+     */
+    function onLeave (rowIndex) {
+        var startIndex = ( rowIndex * 4);
+        var leaveArray = [startIndex , startIndex + 1, startIndex + 2, startIndex + 3];
+        leaveArray.some(function (value) {
+            var index = blackKey.indexOf(value) ;
+            if(index != -1) {
+
+                // 移除被点击的key下标
+                var pos = clickKeys.indexOf(value.toString());
+                if(pos != -1 )  clickKeys.splice(pos , 1);
+                else  gameOver();
+
+                // 设置琴键为初始状态，并从blackKey集合中移除
+                blackKey.splice(index , 1);
+                $(panioKey[value]).css("backgroundColor","#fff");
+                setPanioState(value , false , false);
+
+            }
+            return index != -1 ;
+        })
+    }
+
+    /**
+     * 清除游戏数据
+     */
+    function clear () {
+        $("#grid").html("");
+        $("#score").text("0");
+        panioKey = null ;
+        total = 0 ;
+        blackKey = [] ;
+        clickKeys = [] ;
+    }
+
+    /**
+     * 开始游戏
+     */
+    function startGame () {
+        init();
+        addClickEvent();
+        timeId = setInterval( scroll , speed);
+    }
+    /**
+     * 游戏结束
+     */
+    function gameOver () {
+        clearInterval(timeId);
+        timeId = null ;
+        alert("游戏结束");
+    }
+
+    /**
+     * 重新设置的回调
+     * 清除屏幕以外的所有的钢琴键的颜色,以及被点击过的标记
+     * 设置屏幕内的钢琴键的颜色，以及设置被点击的琴键，以及没有被点击的琴键
+     */
+    function onReset () {
+        var temp = [] ;
+        blackKey = blackKey.map(function (value) {
+            // 重置屏幕以外的琴键状态
+            $(panioKey[value]).css("backgroundColor","#fff");
+            setPanioState(value , false , false);
+            // 设置屏幕内对应琴键的状态
+            var index = value + rowNum * 4;
+            $(panioKey[index]).css("backgroundColor","#000");
+            var pos = clickKeys.indexOf(value.toString());
+            if(pos != -1) temp.push(index.toString());
+            setPanioState(index , true , pos != -1);
+            return index ;
+        })
+        clickKeys = temp ;
+    }
+
+    /**
+     * 设置琴键的状态
+     */
+    function setPanioState (index , isBlackKey , isClick) {
+        var p = $(panioKey[index]).data(index.toString()) ;
+        p.isBlackKey = isBlackKey;
+        p.isClick = isClick;
+
+        var text = isClick ? "ok" : "" ;
+        $(panioKey[index]).text(text);
+    }
+
+    /**
+     * 琴键对象
+     * @param index
+     */
+    function PanioKey (index) {
+       this.index = index ;       // 当前处于集合中的下标
+       this.isClick = false ;     // 是否被点击过
+       this.isBlackKey = false ;  // 是否是黑色琴键
+    }
+
+    window.onload =  startGame;
+
+</script>
+</body>
+</html>

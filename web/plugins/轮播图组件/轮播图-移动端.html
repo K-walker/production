@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>React App</title>
+    <style>
+        .main {
+            width: 100%;
+            height:400px;
+            display: inline-block;
+            overflow: hidden;
+        }
+        .page-container {
+            width: 400%;
+            height: 400px;
+            display: inline-block;
+        }
+        .main span {
+            display: inline-block;
+            width: 25%;
+            line-height: 400px;
+            text-align: center;
+            font-size: 32px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="page-container">
+        <span id="page1" style="background-color: aqua" onclick="onClickPage()">第0页</span>
+        <span id="page2" style="background-color: bisque" onclick="onClickPage()">第1页</span>
+        <span id="page3" style="background-color: chartreuse" onclick="onClickPage()">第2页</span>
+        <span id="page4" style="background-color: darkorange" onclick="onClickPage()">第3页</span>
+    </div>
+</div>
+<script src="../js/jquery-3.0.0.js"></script>
+<script src="../js/Mobile-Slider.js"></script>
+<script>
+
+    var slider = new Slider(".main" , function (index) {
+        console.log("当前是第"+index+"页");
+    });
+
+    function onClickPage () {
+        if( !slider.isSlider ) {
+            console.log("click page");
+        }
+    }
+</script>
+</body>
+</html>
