@@ -40,7 +40,13 @@ ul , li {
 .drop-down-list {
     border: 1px solid #ddd;
     height: 230px;
-    position: relative;
+
+    width: 100%;
+    position: absolute;
+    background-color: #fff;
+    z-index: 999;
+    box-sizing: border-box;
+
     overflow-y: auto;
     overflow-x: hidden;
 }
