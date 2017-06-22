@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .wrapper {
+            padding: 20px;
+            float: left;
+        }
+
+        #city , #city2 {
+            width: 220px;
+         }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div id='drop-down-dialog'  class="k-drop-down"></div>
+</div>
+<div class="wrapper">
+    <div id='drop-down-dialog2'  class="k-drop-down"></div>
+</div>
+<div class="wrapper">
+    <div id='drop-down-dialog3'  class="k-drop-down"></div>
+</div>
+
+<div class="wrapper">
+    <div id='city'>
+        <div class="drop-down-list">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>5</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div id="city2">
+        <div class="drop-down-list">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>5</li>
+                <li>6</li>
+                <li>7</li>
+                <li>8</li>
+                <li>9</li>
+                <li>10</li>
+                <li>11</li>
+                <li>12</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="./js/jquery-1.8.1.min.js"></script>
+<script src="./js/drop-down.js"></script>
+<script src="./js/mousewheel.js"></script>
+<script src="./js/k-scrollbar.js"></script>
+<script type="text/javascript">
+
+    new KScrollBar({
+        root:'#city'
+    });
+
+    new KScrollBar({
+        root:'#city2'
+    });
+
+    new DropDownDialog({
+        id:'#drop-down-dialog',
+        key:'text',
+        data:[
+            {text:'AAA' , value:'111'},
+            {text:'BBB' , value:'222'},
+            {text:'CCC' , value:'333'},
+            {text:'EEE' , value:'555'},
+            {text:'000' , value:'666'}
+        ]
+    })
+    new DropDownDialog({
+        id:'#drop-down-dialog2',
+        key:'text',
+        data:[
+            {text:'AAA' , value:'111'},
+            {text:'BBB' , value:'222'},
+            {text:'CCC' , value:'333'},
+            {text:'DDD' , value:'444'},
+            {text:'EEE' , value:'555'},
+            {text:'BBB' , value:'222'},
+            {text:'CCC' , value:'333'},
+            {text:'DDD' , value:'444'},
+            {text:'EEE' , value:'555'},
+            {text:'000' , value:'666'}
+        ]
+    })
+    new DropDownDialog({
+        id:'#drop-down-dialog3',
+        key:'text',
+        kScrollbar:true,
+        data:[
+            {text:'AAA' , value:'111'},
+            {text:'BBB' , value:'222'},
+            {text:'CCC' , value:'333'},
+            {text:'DDD' , value:'444'},
+            {text:'EEE' , value:'555'},
+            {text:'BBB' , value:'222'},
+            {text:'CCC' , value:'333'},
+            {text:'DDD' , value:'444'},
+            {text:'EEE' , value:'555'},
+            {text:'000' , value:'666'}
+        ]
+    })
+
+</script>
+</body>
+</html>
