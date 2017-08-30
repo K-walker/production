@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>即时聊天</title>
+	<style>
+		* {box-sizing:border-box;margin:0;padding:0;}
+		html , body {height:100%;}
+		ul , li {list-style: none;}
+		.main {
+			height: 100%;
+			position: relative;
+			padding: 10px;
+			background-color: #f5f5f5;
+		}
+		.main h1 {
+		    text-align: center;
+		    font-size: 16px;
+		    background-color: #0080FF;
+		    color: #fff;
+		    line-height: 40px;
+		}
+		em {padding: 0 5px;}
+		.msg-list {
+			max-height:calc(100% - 100px);
+			overflow: auto;
+		}
+		.msg-list li {
+			width: calc(100% - 30px);	
+			margin: 10px;
+			float: left;
+		}
+		.msg-list li p {
+			color: #999;
+			font-size:12px;
+			margin: 5px 0px;
+		}
+		.msg-list li span {
+			max-width: 50%;
+			background-color: #fff;
+			border-radius: 4px;
+			padding: 5px;
+			margin-left: 30px;
+			font-size: 14px;
+			display: inline-block;
+			border: 1px solid #ddd;
+		}
+		.msg-list li .msg-box {
+			width: 100%;
+		}
+		.msg-list li.mine .msg-box  {
+			float: right;
+		}
+		.msg-list li.mine p  {
+			text-align: right;
+		}
+		.msg-list li.mine span {
+			margin-left: 0px;
+			margin-right: 30px;
+			text-align: right;
+			float: right;
+			background-color: #9EEA6A;
+		}
+		.send-box {
+			position: absolute;
+			bottom: 10px;
+			height: 40px;
+			width: calc(100% - 20px);
+		}
+		.send-box input {
+			width:calc(100% - 120px);
+			height: 100%;
+			padding: 0 10px;
+		}
+		.send-box button {
+			width: 120px;
+			height: 100%;
+		}
+		button:hover {cursor: pointer;}
+	</style>
+</head>
+<body>
+	<div class="main">
+		<h1>当前<em>0</em>人在线</h1>
+		<ul class="msg-list"></ul>
+		<div class="send-box">
+			<input type="text" id="msg-input"/><button onclick="onSendMsg()">SEND</button>
+		</div>
+	</div>
+<script src="./js/socket.io.js"></script>
+<script src="./js/jquery-1.8.1.min.js"></script>
+<script>
+	var em = document.getElementsByTagName("em")[0];
+	var socket = io.connect("http://localhost:8888/chat");
+	var id = 0 , name = "";
+	function createMsg (data) {
+		var msgCls = "" ;
+		if(data.type == id ) msgCls = "mine";
+		var msgContent = "<li class="+msgCls+">" +
+							"<div class='msg-box'>"+
+								"<p>"+data.name+"</p>"+
+								"<span>"+data.content+"</span>"+
+							"</div>"+
+						 "</li>" ;
+		$(".msg-list").append(msgContent);
+		$(".msg-list").scrollTop($(".msg-list").height()) ;
+	}
+
+	function send (data) {
+		socket.emit("onClientSend" , data);
+	}
+
+	function onSendMsg () {
+		var content = $("#msg-input").val();
+		if(content != "") {
+			send({type:id,name:getCookie("u"+id),content:content});
+			$("#msg-input").val("");
+		}
+	}
+
+	socket.on("onServerSend" , function (data) {
+			createMsg(data);
+	})
+
+	socket.on("setId" , function (data) {
+		id = data.id ;
+		console.log(document.cookie);
+	})
+
+	socket.on("online" , function (num) {
+		em.innerHTML = num;
+	})
+
+	function getCookie(name) {
+		var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+		if(arr = document.cookie.match(reg))
+		return decodeURIComponent(arr[2]);
+		else return "未知用户";
+	}
+
+	window.addEventListener("keydown" , function (e) {
+		if(e.keyCode == 13) {
+			onSendMsg();
+		}
+	})
+</script>
+</body>
+</html>

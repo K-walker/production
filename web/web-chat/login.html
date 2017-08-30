@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>登陆</title>
+	<style>
+		*{box-sizing:border-box;}
+		.login-box {
+			width: 300px;
+			height: 120px;
+			box-shadow: 2px 2px 4px 2px rgba(0 , 0 , 0, .3);
+			position: absolute;
+			left:calc(50% - 150px);
+			top:calc(50% - 60px);
+		}
+		.login-box input {
+			width: calc(100% - 20px);
+			height: 40px;
+			padding: 0 10px;
+			margin: 10px;
+		}
+		.login-box input[type="submit"]:hover {
+			cursor: pointer;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="login-box">
+		<form id="form" method="get" action="http://localhost:8888/chat">
+			<input id="uname" type="text" name="uname" placeholder="enter you name"/>
+			<input type="button" value="Login" onclick="onLogin()"/>
+		</form>
+	</div>
+<script>
+	function onLogin () {
+		var name = document.getElementById("uname").value ;
+		if(name != "") document.getElementById("form").submit();
+		else alert("请输入您的名字");
+	}
+</script>
+</body>
+</html>
